@@ -1,0 +1,17 @@
+{
+  "short_name": "VYBE",
+  "name": "VYBE — Futuristic Music Streaming",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "192x192 512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#05030a",
+  "theme_color": "#05030a",
+  "display": "standalone",
+  "orientation": "portrait"
+}
