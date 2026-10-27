@@ -22,7 +22,7 @@ const [playlists, setPlaylists] = useState(() => {
 
 const [playlistName, setPlaylistName] = useState("");
 const [showPlaylists, setShowPlaylists] = useState(false);
-
+const [selectedPlaylist, setSelectedPlaylist] = useState(null);
 useEffect(() => {
   localStorage.setItem("vybe-playlists", JSON.stringify(playlists));
 }, [playlists]);
@@ -248,11 +248,16 @@ function createPlaylist(event) {
   {playlists.map((playlist) => (
     <div
       key={playlist.id}
+      onClick={() => setSelectedPlaylist(playlist.id)}
       style={{
         padding: "14px",
         marginBottom: "10px",
-        border: "1px solid #302b46",
+        border:
+          selectedPlaylist === playlist.id
+            ? "1px solid #a78bfa"
+            : "1px solid #302b46",
         borderRadius: "12px",
+        cursor: "pointer",
       }}
     >
       <strong>♫ {playlist.name}</strong>
@@ -262,6 +267,54 @@ function createPlaylist(event) {
     </div>
   ))}
 </div>
+{selectedPlaylist !== null && (
+  <div style={{ margin: "20px 0" }}>
+    <h3>
+      {playlists.find((p) => p.id === selectedPlaylist)?.name}
+    </h3>
+
+    {playlists.find((p) => p.id === selectedPlaylist)?.songs.map((song) => (
+      <div
+        key={song.trackId}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "12px",
+          padding: "10px",
+        }}
+      >
+        <img
+          src={song.artworkUrl100}
+          alt=""
+          width="45"
+          height="45"
+        />
+
+        <span style={{ flex: 1 }}>
+          {song.trackName} — {song.artistName}
+        </span>
+
+        <button
+          className="primary-button"
+          onClick={() => chooseSong(song)}
+        >
+          ▶ Play
+        </button>
+      </div>
+    ))}
+
+    {playlists.find((p) => p.id === selectedPlaylist)?.songs.length === 0 && (
+      <p>Your playlist is empty. Add songs using the dropdown above.</p>
+    )}
+
+    <button
+      className="primary-button"
+      onClick={() => setSelectedPlaylist(null)}
+    >
+      Close Playlist
+    </button>
+  </div>
+)}
           {loading && <p className="eyebrow">Finding your music...</p>}
           {error && <p role="status">{error}</p>}
 
