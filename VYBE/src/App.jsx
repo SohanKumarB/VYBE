@@ -134,11 +134,16 @@ function createPlaylist(event) {
       <aside className="sidebar">
         <h1 className="logo">VYBE<span>.</span></h1>
         <p className="nav-label">MENU</p>
-        <button className="nav-item active">⌂ <span>Home</span></button>
+        <button
+  className={`nav-item ${!showFavorites ? "active" : ""}`}
+  onClick={() => setShowFavorites(false)}
+>
+  ⌂ <span>Home</span>
+</button>
         <button className="nav-item">⌕ <span>Discover</span></button>
         <button
   className={`nav-item ${showFavorites ? "active" : ""}`}
-  onClick={() => setShowFavorites(!showFavorites)}
+  onClick={() => setShowFavorites(true)}
 >
   ♡ <span>Favorites</span>
 </button>
@@ -209,6 +214,18 @@ function createPlaylist(event) {
               Search
             </button>
           </form>
+          
+<button
+  className="primary-button"
+  onClick={() => {
+    setSearch("");
+    searchMusic("Trending");
+    setShowFavorites(false);
+  }}
+>
+  Clear Search
+</button>
+
 <div style={{ margin: "24px 0" }}>
   <h3>Your Playlists</h3>
 
@@ -249,10 +266,13 @@ function createPlaylist(event) {
           {error && <p role="status">{error}</p>}
 
           <div className="song-grid">
+            {showFavorites && !songs.some((song) => favorites.includes(song.trackId)) && (
+  <p style={{ opacity: 0.7, padding: "20px 0" }}>
+    ♡ No favorites yet. Search for a song and tap the heart to save it!
+  </p>
+)}
             {(showFavorites
-  ? songs.filter((song) =>
-      favorites.includes(song.trackId)
-    )
+  ? songs.filter((song) => favorites.includes(song.trackId))
   : songs
 ).map((song, index) => (
               <button
