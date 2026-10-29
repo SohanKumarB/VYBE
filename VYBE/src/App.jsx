@@ -1,4 +1,3 @@
-
 import { useEffect, useRef, useState } from "react";
 import "./App.css";
 
@@ -264,6 +263,26 @@ function createPlaylist(event) {
       <span style={{ marginLeft: "12px", opacity: 0.7 }}>
         {playlist.songs.length} songs
       </span>
+      <button
+  type="button"
+  className="primary-button"
+  onClick={(event) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (window.confirm(`Delete "${playlist.name}"?`)) {
+      setPlaylists((previous) =>
+        previous.filter((item) => item.id !== playlist.id)
+      );
+
+      if (selectedPlaylist === playlist.id) {
+        setSelectedPlaylist(null);
+      }
+    }
+  }}
+>
+  🗑 Delete
+</button>
     </div>
   ))}
 </div>
@@ -295,10 +314,32 @@ function createPlaylist(event) {
         </span>
 
         <button
+          type="button"
           className="primary-button"
           onClick={() => chooseSong(song)}
         >
           ▶ Play
+        </button>
+
+        <button
+          type="button"
+          className="primary-button"
+          onClick={() => {
+            setPlaylists((previous) =>
+              previous.map((playlist) =>
+                playlist.id === selectedPlaylist
+                  ? {
+                      ...playlist,
+                      songs: playlist.songs.filter(
+                        (item) => item.trackId !== song.trackId
+                      ),
+                    }
+                  : playlist
+              )
+            );
+          }}
+        >
+          ✕ Remove
         </button>
       </div>
     ))}
